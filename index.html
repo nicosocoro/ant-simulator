@@ -10,6 +10,16 @@
         left: 10px;
     }
 
+    .ant-with-food {
+        width: 10px;
+        height: 10px;
+        background-color: blue;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
     .food {
         width: 8px;
         height: 8px;
@@ -27,18 +37,19 @@
     <div id="map"></div>
 </body>
 <script>
-    const mapWidth = 500;
-    const mapHeight = 500;
+    const mapWidth = 100;
+    const mapHeight = 100;
     const antAmount = 3;
     const foodAmount = 5;
     const timeBetweenMovesMs = 100;
+    const foodsInMap = [];
+    const antsInMap = [];
+
     let runnning = true;
-    const foodPositions = [];
-    const ants = [];
 
     function printStatus() {
         console.log("Ants status:");
-        for (const ant of ants) {
+        for (const ant of antsInMap) {
             console.log(ant);
         }
     }
@@ -57,7 +68,7 @@
         let antSpawned = 0;
         while (antSpawned < antAmount) {
             const ant = { id: "ant-" + antSpawned, x: 10, y: 10, hasFood: false };
-            ants.push(ant);
+            antsInMap.push(ant);
 
             const antInDom = document.createElement("div");
             antInDom.id = ant.id;
@@ -76,17 +87,60 @@
             const x = getRandomIntInclusive(mapWidth - 50, mapWidth - 10);
             const y = getRandomIntInclusive(mapHeight - 50, mapHeight - 10);
 
-            if (foodPositions.some(pos => isNear(pos, { x: x, y: y }, 5))) {
+            if (foodsInMap.some(pos => isNear(pos, { x: x, y: y }, 5))) {
                 continue;
             }
 
-            const food = document.createElement("div");
-            food.className = "food";
-            food.style.left = x + "px";
-            food.style.top = y + "px";
-            document.getElementById("map").appendChild(food);
-            foodPositions.push({ x: x, y: y });
+            const food = { id: 'food-' + foodSpawned, x: x, y: y };
+            const foodInDom = document.createElement("div");
+            foodInDom.id = food.id;
+            foodInDom.className = "food";
+            foodInDom.style.left = food.x + "px";
+            foodInDom.style.top = food.y + "px";
+            document.getElementById("map").appendChild(foodInDom);
+            foodsInMap.push(food);
             foodSpawned++;
+        }
+    }
+
+    function tryPickFood(ant) {
+        if (canPickFood(ant)) {
+            pickFood(ant);
+        }
+    }
+
+    function canPickFood(ant) {
+        if (ant.hasFood) {
+            return false;
+        }
+        for (const food of foodsInMap) {
+            if (isNear({ x: ant.x, y: ant.y }, food, 10)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function pickFood(ant) {
+        for (const food of foodsInMap) {
+            if (isNear({ x: ant.x, y: ant.y }, food, 10)) {
+                removeFood(food);
+
+                const antInDom = document.getElementById(ant.id);
+                antInDom.className = "ant-with-food";
+
+                ant.hasFood = true;
+
+                return;
+            }
+        }
+    }
+
+    function removeFood(foodToRemove) {
+        const foodInDom = document.getElementById(foodToRemove.id);
+        if (foodInDom) {
+            foodsInMap.splice(foodsInMap.indexOf(foodToRemove), 1);
+            foodInDom.remove();
         }
     }
 
@@ -115,7 +169,7 @@
 
     async function moveAntRepeatedly(antId) {
         while (runnning) {
-            for (const ant of ants) {
+            for (const ant of antsInMap) {
                 const newX = ant.x + (10 * getRandomDirection());
                 const newY = ant.y + (10 * getRandomDirection());
                 if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
@@ -128,8 +182,11 @@
                 const antInDom = document.getElementById(ant.id);
                 antInDom.style.left = ant.x + "px";
                 antInDom.style.top = ant.y + "px";
-                await sleep(timeBetweenMovesMs);
+
+                tryPickFood(ant);
             }
+
+            await sleep(timeBetweenMovesMs);
         }
     }
 
