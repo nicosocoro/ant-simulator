@@ -1,0 +1,54 @@
+<html>
+<style>
+    .ant {
+        width: 10px;
+        height: 10px;
+        background-color: black;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+</style>
+
+<body>
+    <div id="ant" class="ant"></div>
+</body>
+<script>
+    // Move the ant 1000 times, waiting 1 second between moves without blocking the UI.
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min); // Ensures min is an integer
+        max = Math.floor(max); // Ensures max is an integer
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomDirection() {
+        let random = getRandomIntInclusive(-1,1);
+        return random >= 0 ? 1 : -1;
+    }
+
+    async function moveAntRepeatedly(times, delayMs) {
+        const ant = document.getElementById("ant");
+        let x = 10;
+        let y = 10;
+        for (let i = 0; i < times; i++) {
+            x = x + (10 * getRandomDirection());
+            y = y + (10 * getRandomDirection());
+            ant.style.left = x + "px";
+            ant.style.top = y + "px";
+            await sleep(delayMs);
+        }
+    }
+
+    moveAntRepeatedly(1000, 100);
+
+    document.getElementById("ant").addEventListener("click", function () {
+        alert("Ant clicked!");
+    });
+</script>
+
+</html>
