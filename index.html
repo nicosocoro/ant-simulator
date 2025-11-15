@@ -22,6 +22,7 @@
 <script>
     const mapWidth = 500;
     const mapHeight = 500;
+    const timeBetweenMovesMs = 100;
     let runnning = true;
 
     function sleep(ms) {
@@ -51,21 +52,27 @@
         runnning = false;
     }
 
-    async function moveAntRepeatedly(delayMs) {
+    async function moveAntRepeatedly() {
         const ant = document.getElementById("ant");
         let x = 10;
         let y = 10;
         while (runnning) {
-            x = x + (10 * getRandomDirection());
-            y = y + (10 * getRandomDirection());
+            const newX = x + (10 * getRandomDirection());
+            const newY = y + (10 * getRandomDirection());
+            if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
+                continue;
+            }
+
+            x = newX;
+            y = newY;
             ant.style.left = x + "px";
             ant.style.top = y + "px";
-            await sleep(delayMs);
+            await sleep(timeBetweenMovesMs);
         }
     }
 
     drawMap();
-    moveAntRepeatedly(100);
+    moveAntRepeatedly();
 </script>
 
 </html>
