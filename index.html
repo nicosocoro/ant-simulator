@@ -9,6 +9,14 @@
         top: 10px;
         left: 10px;
     }
+
+    .food {
+        width: 8px;
+        height: 8px;
+        background-color: green;
+        border-radius: 50%;
+        position: absolute;
+    }
 </style>
 
 <body>
@@ -22,11 +30,48 @@
 <script>
     const mapWidth = 500;
     const mapHeight = 500;
+    const foodAmount = 5;
     const timeBetweenMovesMs = 100;
     let runnning = true;
+    const foodPositions = [];
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function isNear(position1, position2, threshold) {
+        const dx = position1.x - position2.x;
+        const dy = position1.y - position2.y;
+        return Math.sqrt(dx * dx + dy * dy) <= threshold;
+    }
+
+    function spawnFood() {
+        let foodSpawned = 0;
+        while (foodSpawned < foodAmount) {
+
+            const x = getRandomIntInclusive(mapWidth - 50, mapWidth - 10);
+            const y = getRandomIntInclusive(mapHeight - 50, mapHeight - 10);
+
+            if (foodPositions.some(pos => isNear(pos, { x: x, y: y }, 2))) {
+                continue;
+            }
+
+            const food = document.createElement("div");
+            food.className = "food";
+            food.style.left = x + "px";
+            food.style.top = y + "px";
+            document.getElementById("map").appendChild(food);
+            foodPositions.push({ x: x, y: y });
+            foodSpawned++;
+        }
+    }
+
+    function drawMap() {
+        const map = document.getElementById("map");
+        map.style.width = mapWidth + "px";
+        map.style.height = mapHeight + "px";
+        map.style.border = "1px solid black";
+        map.style.position = "relative";
     }
 
     function drawMap() {
@@ -72,6 +117,7 @@
     }
 
     drawMap();
+    spawnFood();
     moveAntRepeatedly();
 </script>
 
