@@ -12,30 +12,50 @@
 </style>
 
 <body>
-    <div id="ant" class="ant"></div>
+    <div>
+        <button onclick="stop()">Stop Ant</button>
+    </div>
+    <div id="map">
+        <div id="ant" class="ant"></div>
+    </div>
 </body>
 <script>
-    // Move the ant 1000 times, waiting 1 second between moves without blocking the UI.
+    const mapWidth = 500;
+    const mapHeight = 500;
+    let runnning = true;
+
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    function drawMap() {
+        const map = document.getElementById("map");
+        map.style.width = mapWidth + "px";
+        map.style.height = mapHeight + "px";
+        map.style.border = "1px solid black";
+        map.style.position = "relative";
+    }
+
     function getRandomIntInclusive(min, max) {
-        min = Math.ceil(min); // Ensures min is an integer
-        max = Math.floor(max); // Ensures max is an integer
+        min = Math.ceil(min);
+        max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function getRandomDirection() {
-        let random = getRandomIntInclusive(-1,1);
+        let random = getRandomIntInclusive(-1, 1);
         return random >= 0 ? 1 : -1;
     }
 
-    async function moveAntRepeatedly(times, delayMs) {
+    function stop() {
+        runnning = false;
+    }
+
+    async function moveAntRepeatedly(delayMs) {
         const ant = document.getElementById("ant");
         let x = 10;
         let y = 10;
-        for (let i = 0; i < times; i++) {
+        while (runnning) {
             x = x + (10 * getRandomDirection());
             y = y + (10 * getRandomDirection());
             ant.style.left = x + "px";
@@ -44,11 +64,8 @@
         }
     }
 
-    moveAntRepeatedly(1000, 100);
-
-    document.getElementById("ant").addEventListener("click", function () {
-        alert("Ant clicked!");
-    });
+    drawMap();
+    moveAntRepeatedly(100);
 </script>
 
 </html>
