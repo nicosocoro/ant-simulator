@@ -20,6 +20,22 @@
         left: 10px;
     }
 
+    .anthill {
+        width: 30px;
+        height: 30px;
+        background-color: grey;
+        border-radius: 50%;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .anthill p {
+        color: white;
+        text-align: center;
+        margin: 5px;
+    }
+
     .food {
         width: 8px;
         height: 8px;
@@ -34,7 +50,11 @@
         <button onclick="printStatus()">Print status</button>
         <button onclick="stop()">Stop Ant</button>
     </div>
-    <div id="map"></div>
+    <div id="map">
+        <div id="anthill" class="anthill">
+            <p id="food-count"></p>
+        </div>
+    </div>
 </body>
 <script>
     const mapWidth = 100;
@@ -44,7 +64,12 @@
     const timeBetweenMovesMs = 100;
     const foodsInMap = [];
     const antsInMap = [];
+    const anthill = {
+        position: { x: 20, y: 20 },
+        radius: 15
+    };
 
+    let foodCollectedInHill = 0;
     let runnning = true;
 
     function printStatus() {
@@ -52,6 +77,10 @@
         for (const ant of antsInMap) {
             console.log(ant);
         }
+        
+        console.log("Ants with food pending to deliver: " + antsInMap.filter(ant => ant.hasFood).length);
+        console.log("Foods in map: " + foodsInMap.length);
+        console.log("Foods delivered: " + foodCollectedInHill);
     }
 
     function sleep(ms) {
@@ -109,6 +138,20 @@
         }
     }
 
+    function tryToDeliverFood(ant) {
+        if (!ant.hasFood) return;
+
+        const isInHill = isNear({ x: ant.x, y: ant.y }, anthill.position, anthill.radius);
+        if (isInHill) {
+            const antInDom = document.getElementById(ant.id);
+            antInDom.className = "ant";
+
+            ant.hasFood = false;
+
+            onFoodDelivered();
+        }
+    }
+
     function canPickFood(ant) {
         if (ant.hasFood) {
             return false;
@@ -152,6 +195,25 @@
         map.style.position = "relative";
     }
 
+    function initializeAnthill() {
+        const anthillDom = document.getElementById("anthill");
+        anthillDom.style.left = anthill.position.x + "px";
+        anthillDom.style.top = anthill.position.y + "px";
+
+        updateFoodCount(0);
+    }
+
+    function updateFoodCount(count) {
+        foodCollectedInHill = count;
+        const foodCountElement = document.getElementById("food-count");
+        foodCountElement.innerText = count;
+    }
+
+    function onFoodDelivered() {
+        foodCollectedInHill++;
+        updateFoodCount(foodCollectedInHill);
+    }
+
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -184,6 +246,7 @@
                 antInDom.style.top = ant.y + "px";
 
                 tryPickFood(ant);
+                tryToDeliverFood(ant);
             }
 
             await sleep(timeBetweenMovesMs);
@@ -191,6 +254,7 @@
     }
 
     drawMap();
+    initializeAnthill();
     spawnAnts();
     spawnFood();
     moveAntRepeatedly();
