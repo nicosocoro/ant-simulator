@@ -23,9 +23,7 @@
     <div>
         <button onclick="stop()">Stop Ant</button>
     </div>
-    <div id="map">
-        <div id="ant" class="ant"></div>
-    </div>
+    <div id="map"></div>
 </body>
 <script>
     const mapWidth = 500;
@@ -45,6 +43,15 @@
         return Math.sqrt(dx * dx + dy * dy) <= threshold;
     }
 
+    function spawnAnt() {
+        const ant = document.createElement("div");
+        ant.id = "ant";
+        ant.className = "ant";
+        ant.style.left = "10px";
+        ant.style.top = "10px";
+        document.getElementById("map").appendChild(ant);
+    }
+
     function spawnFood() {
         let foodSpawned = 0;
         while (foodSpawned < foodAmount) {
@@ -52,7 +59,7 @@
             const x = getRandomIntInclusive(mapWidth - 50, mapWidth - 10);
             const y = getRandomIntInclusive(mapHeight - 50, mapHeight - 10);
 
-            if (foodPositions.some(pos => isNear(pos, { x: x, y: y }, 2))) {
+            if (foodPositions.some(pos => isNear(pos, { x: x, y: y }, 5))) {
                 continue;
             }
 
@@ -64,14 +71,6 @@
             foodPositions.push({ x: x, y: y });
             foodSpawned++;
         }
-    }
-
-    function drawMap() {
-        const map = document.getElementById("map");
-        map.style.width = mapWidth + "px";
-        map.style.height = mapHeight + "px";
-        map.style.border = "1px solid black";
-        map.style.position = "relative";
     }
 
     function drawMap() {
@@ -117,6 +116,7 @@
     }
 
     drawMap();
+    spawnAnt();
     spawnFood();
     moveAntRepeatedly();
 </script>
