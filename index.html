@@ -21,6 +21,7 @@
 
 <body>
     <div>
+        <button onclick="printStatus()">Print status</button>
         <button onclick="stop()">Stop Ant</button>
     </div>
     <div id="map"></div>
@@ -28,10 +29,19 @@
 <script>
     const mapWidth = 500;
     const mapHeight = 500;
+    const antAmount = 3;
     const foodAmount = 5;
     const timeBetweenMovesMs = 100;
     let runnning = true;
     const foodPositions = [];
+    const ants = [];
+
+    function printStatus() {
+        console.log("Ants status:");
+        for (const ant of ants) {
+            console.log(ant);
+        }
+    }
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -43,13 +53,20 @@
         return Math.sqrt(dx * dx + dy * dy) <= threshold;
     }
 
-    function spawnAnt() {
-        const ant = document.createElement("div");
-        ant.id = "ant";
-        ant.className = "ant";
-        ant.style.left = "10px";
-        ant.style.top = "10px";
-        document.getElementById("map").appendChild(ant);
+    function spawnAnts() {
+        let antSpawned = 0;
+        while (antSpawned < antAmount) {
+            const ant = { id: "ant-" + antSpawned, x: 10, y: 10, hasFood: false };
+            ants.push(ant);
+
+            const antInDom = document.createElement("div");
+            antInDom.id = ant.id;
+            antInDom.className = "ant";
+            antInDom.style.left = ant.x + "px";
+            antInDom.style.top = ant.y + "px";
+            document.getElementById("map").appendChild(antInDom);
+            antSpawned++;
+        }
     }
 
     function spawnFood() {
@@ -96,27 +113,28 @@
         runnning = false;
     }
 
-    async function moveAntRepeatedly() {
-        const ant = document.getElementById("ant");
-        let x = 10;
-        let y = 10;
+    async function moveAntRepeatedly(antId) {
         while (runnning) {
-            const newX = x + (10 * getRandomDirection());
-            const newY = y + (10 * getRandomDirection());
-            if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
-                continue;
-            }
+            for (const ant of ants) {
+                const newX = ant.x + (10 * getRandomDirection());
+                const newY = ant.y + (10 * getRandomDirection());
+                if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
+                    continue;
+                }
 
-            x = newX;
-            y = newY;
-            ant.style.left = x + "px";
-            ant.style.top = y + "px";
-            await sleep(timeBetweenMovesMs);
+                ant.x = newX;
+                ant.y = newY;
+
+                const antInDom = document.getElementById(ant.id);
+                antInDom.style.left = ant.x + "px";
+                antInDom.style.top = ant.y + "px";
+                await sleep(timeBetweenMovesMs);
+            }
         }
     }
 
     drawMap();
-    spawnAnt();
+    spawnAnts();
     spawnFood();
     moveAntRepeatedly();
 </script>
