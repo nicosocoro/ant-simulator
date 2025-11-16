@@ -14,7 +14,7 @@ function move(ant) {
 
     tryPickFood(ant);
     tryToDeliverFood(ant);
-    createAnthillPheromone({ x: ant.x, y: ant.y });
+    tryToLeavePheromone(ant);
 }
 
 function tryPickFood(ant) {
@@ -61,5 +61,12 @@ function pickFood(ant) {
 
             return;
         }
+    }
+}
+
+function tryToLeavePheromone(ant) {
+    if (!ant.hasFood) {
+        createAnthillPheromone(ant);
+        return;
     }
 }
