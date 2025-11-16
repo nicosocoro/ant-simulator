@@ -1,4 +1,5 @@
 const antMovementDistance = 8;
+const antDetectionDistance = 5;
 
 function ant__spawn(index, initialPosition) {
     const ant = { id: "ant-" + index, position: initialPosition, hasFood: false };

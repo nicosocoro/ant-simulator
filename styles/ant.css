@@ -1,0 +1,19 @@
+.ant {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.ant-with-food {
+    width: 10px;
+    height: 10px;
+    background-color: blue;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
