@@ -1,7 +1,9 @@
-function move(ant) {
-    const newX = ant.x + (10 * getRandomDirection());
-    const newY = ant.y + (10 * getRandomDirection());
-    if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
+const antMovementDistance = 8;
+
+function ant__onCycleStart(ant) {
+    const newX = ant.x + (antMovementDistance * getRandomDirection());
+    const newY = ant.y + (antMovementDistance * getRandomDirection());
+    if (newX < 0 || newX > mapSize - 10 || newY < 0 || newY > mapSize - 10) {
         return;
     }
 

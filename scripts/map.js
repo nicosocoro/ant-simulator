@@ -1,6 +1,5 @@
-const mapWidth = 300;
-const mapHeight = 300;
-const antAmount = 3;
+const mapSize = 600;
+const antAmount = 35;
 const foodAmount = 5;
 const timeBetweenMovesMs = 100;
 
@@ -24,8 +23,8 @@ function spawnFood() {
     let foodSpawned = 0;
     while (foodSpawned < foodAmount) {
 
-        const x = getRandomIntInclusive(mapWidth - 50, mapWidth - 10);
-        const y = getRandomIntInclusive(mapHeight - 50, mapHeight - 10);
+        const x = getRandomIntInclusive(mapSize - 50, mapSize - 10);
+        const y = getRandomIntInclusive(mapSize - 50, mapSize - 10);
 
         if (foodsInMap.some(pos => isNear(pos, { x: x, y: y }, 5))) {
             continue;
@@ -53,8 +52,8 @@ function removeFood(foodToRemove) {
 
 function drawMap() {
     const map = document.getElementById("map");
-    map.style.width = mapWidth + "px";
-    map.style.height = mapHeight + "px";
+    map.style.width = mapSize + "px";
+    map.style.height = mapSize + "px";
     map.style.border = "1px solid black";
     map.style.position = "relative";
 }
