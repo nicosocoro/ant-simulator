@@ -3,7 +3,7 @@ const anthillPheromonesCycles = 100;
 function createAnthillPheromone(antProducer, cycle) {
     const pheromone = {
         id: 'pheromone-anthill-' + antProducer.id + '-' + cycle,
-        position: { x: antProducer.x, y: antProducer.y },
+        position: { x: antProducer.position.x, y: antProducer.position.y },
         remainingCycles: anthillPheromonesCycles
     };
     anthillPheromones.push(pheromone);

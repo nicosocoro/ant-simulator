@@ -1,18 +1,31 @@
 const antMovementDistance = 8;
 
+function ant__spawn(index, initialPosition) {
+    const ant = { id: "ant-" + index, position: initialPosition, hasFood: false };
+    antsInMap.push(ant);
+
+    const antInDom = document.createElement("div");
+    antInDom.id = ant.id;
+    antInDom.className = "ant";
+    antInDom.style.left = ant.position.x + "px";
+    antInDom.style.top = ant.position.y + "px";
+    document.getElementById("map").appendChild(antInDom);
+    return ant;
+}
+
 function ant__onCycleStart(ant) {
-    const newX = ant.x + (antMovementDistance * getRandomDirection());
-    const newY = ant.y + (antMovementDistance * getRandomDirection());
+    const newX = ant.position.x + (antMovementDistance * getRandomDirection());
+    const newY = ant.position.y + (antMovementDistance * getRandomDirection());
     if (newX < 0 || newX > mapSize - 10 || newY < 0 || newY > mapSize - 10) {
         return;
     }
 
-    ant.x = newX;
-    ant.y = newY;
+    ant.position.x = newX;
+    ant.position.y = newY;
 
     const antInDom = document.getElementById(ant.id);
-    antInDom.style.left = ant.x + "px";
-    antInDom.style.top = ant.y + "px";
+    antInDom.style.left = ant.position.x + "px";
+    antInDom.style.top = ant.position.y + "px";
 
     tryPickFood(ant);
     tryToDeliverFood(ant);
@@ -28,7 +41,7 @@ function tryPickFood(ant) {
 function tryToDeliverFood(ant) {
     if (!ant.hasFood) return;
 
-    const isInHill = isNear({ x: ant.x, y: ant.y }, anthill.position, anthill.radius);
+    const isInHill = isNear(ant.position, anthill.position, anthill.radius);
     if (isInHill) {
         const antInDom = document.getElementById(ant.id);
         if (antInDom) antInDom.className = "ant";
@@ -44,7 +57,7 @@ function canPickFood(ant) {
         return false;
     }
     for (const food of foodsInMap) {
-        if (isNear({ x: ant.x, y: ant.y }, food, 10)) {
+        if (isNear(ant.position, food, 10)) {
             return true;
         }
     }
@@ -53,7 +66,7 @@ function canPickFood(ant) {
 
 function pickFood(ant) {
     for (const food of foodsInMap) {
-        if (isNear({ x: ant.x, y: ant.y }, food, 10)) {
+        if (isNear(ant.position, food, 10)) {
             removeFood(food);
 
             const antInDom = document.getElementById(ant.id);

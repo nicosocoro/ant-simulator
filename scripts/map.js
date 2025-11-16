@@ -6,15 +6,8 @@ const timeBetweenMovesMs = 100;
 function spawnAnts() {
     let antSpawned = 0;
     while (antSpawned < antAmount) {
-        const ant = { id: "ant-" + antSpawned, x: 10, y: 10, hasFood: false };
+        const ant = ant__spawn(antSpawned, { x: 10, y: 10 });
         antsInMap.push(ant);
-
-        const antInDom = document.createElement("div");
-        antInDom.id = ant.id;
-        antInDom.className = "ant";
-        antInDom.style.left = ant.x + "px";
-        antInDom.style.top = ant.y + "px";
-        document.getElementById("map").appendChild(antInDom);
         antSpawned++;
     }
 }
@@ -26,16 +19,16 @@ function spawnFood() {
         const x = getRandomIntInclusive(mapSize - 50, mapSize - 10);
         const y = getRandomIntInclusive(mapSize - 50, mapSize - 10);
 
-        if (foodsInMap.some(pos => isNear(pos, { x: x, y: y }, 5))) {
+        if (foodsInMap.some(food => isNear(food.position, { x: x, y: y }, 5))) {
             continue;
         }
 
-        const food = { id: 'food-' + foodSpawned, x: x, y: y };
+        const food = { id: 'food-' + foodSpawned, position: { x: x, y: y } };
         const foodInDom = document.createElement("div");
         foodInDom.id = food.id;
         foodInDom.className = "food";
-        foodInDom.style.left = food.x + "px";
-        foodInDom.style.top = food.y + "px";
+        foodInDom.style.left = food.position.x + "px";
+        foodInDom.style.top = food.position.y + "px";
         document.getElementById("map").appendChild(foodInDom);
         foodsInMap.push(food);
         foodSpawned++;
