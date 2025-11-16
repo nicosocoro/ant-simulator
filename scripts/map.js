@@ -1,5 +1,5 @@
-const mapWidth = 100;
-const mapHeight = 100;
+const mapWidth = 300;
+const mapHeight = 300;
 const antAmount = 3;
 const foodAmount = 5;
 const timeBetweenMovesMs = 100;

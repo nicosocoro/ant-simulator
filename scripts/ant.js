@@ -1,3 +1,22 @@
+function move(ant) {
+    const newX = ant.x + (10 * getRandomDirection());
+    const newY = ant.y + (10 * getRandomDirection());
+    if (newX < 0 || newX > mapWidth - 10 || newY < 0 || newY > mapHeight - 10) {
+        return;
+    }
+
+    ant.x = newX;
+    ant.y = newY;
+
+    const antInDom = document.getElementById(ant.id);
+    antInDom.style.left = ant.x + "px";
+    antInDom.style.top = ant.y + "px";
+
+    tryPickFood(ant);
+    tryToDeliverFood(ant);
+    createAnthillPheromone({ x: ant.x, y: ant.y });
+}
+
 function tryPickFood(ant) {
     if (canPickFood(ant)) {
         pickFood(ant);
