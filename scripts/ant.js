@@ -46,7 +46,9 @@ function tryToDeliverFood(ant) {
     const isInHill = isInRange(ant.position, anthill.position, anthill.radius);
     if (isInHill) {
         const antInDom = document.getElementById(ant.id);
-        if (antInDom) antInDom.className = "ant";
+        if (antInDom) {
+            antInDom.className = "ant";
+        }
 
         ant.hasFood = false;
 
@@ -72,7 +74,7 @@ function pickFood(ant, foodsInMap) {
             removeFood(food);
 
             const antInDom = document.getElementById(ant.id);
-            antInDom.className = "ant-with-food";
+            antInDom.className = "ant ant-with-food";
 
             ant.hasFood = true;
 

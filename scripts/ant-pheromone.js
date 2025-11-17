@@ -11,7 +11,7 @@ function createAnthillPheromone(antProducer, cycle) {
 
     const pheromoneInDom = document.createElement("div");
     pheromoneInDom.id = pheromone.id;
-    pheromoneInDom.className = "pheromone-anthill";
+    pheromoneInDom.className = "pheromone pheromone-anthill";
     pheromoneInDom.style.left = pheromone.position.x + "px";
     pheromoneInDom.style.top = pheromone.position.y + "px";
     document.getElementById("map").appendChild(pheromoneInDom);
@@ -27,7 +27,7 @@ function createFoodPheromone(antProducer, cycle) {
 
     const pheromoneInDom = document.createElement("div");
     pheromoneInDom.id = pheromone.id;
-    pheromoneInDom.className = "pheromone-food";
+    pheromoneInDom.className = "pheromone pheromone-food";
     pheromoneInDom.style.left = pheromone.position.x + "px";
     pheromoneInDom.style.top = pheromone.position.y + "px";
     document.getElementById("map").appendChild(pheromoneInDom);
