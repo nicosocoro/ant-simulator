@@ -1,4 +1,5 @@
 const anthillPheromonesCycles = 100;
+const foodPheromonesCycles = 100;
 
 function createAnthillPheromone(antProducer, cycle) {
     const pheromone = {
@@ -16,11 +17,28 @@ function createAnthillPheromone(antProducer, cycle) {
     document.getElementById("map").appendChild(pheromoneInDom);
 }
 
-function pheromone__onCycleCompleted() {
-    processAnthillPheromones(anthillPheromones);
+function createFoodPheromone(antProducer, cycle) {
+    const pheromone = {
+        id: 'pheromone-food-' + antProducer.id + '-' + cycle,
+        position: { x: antProducer.position.x, y: antProducer.position.y },
+        remainingCycles: foodPheromonesCycles
+    };
+    foodPheromones.push(pheromone);
+
+    const pheromoneInDom = document.createElement("div");
+    pheromoneInDom.id = pheromone.id;
+    pheromoneInDom.className = "pheromone-food";
+    pheromoneInDom.style.left = pheromone.position.x + "px";
+    pheromoneInDom.style.top = pheromone.position.y + "px";
+    document.getElementById("map").appendChild(pheromoneInDom);
 }
 
-function processAnthillPheromones(pheromones) {
+function pheromone__onCycleCompleted() {
+    processPheromones(anthillPheromones);
+    processPheromones(foodPheromones);
+}
+
+function processPheromones(pheromones) {
     for (let i = pheromones.length - 1; i >= 0; i--) {
         const pheromone = pheromones[i];
         pheromone.remainingCycles--;

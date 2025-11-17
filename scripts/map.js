@@ -1,4 +1,4 @@
-const mapSize = 100;
+const mapSize = 250;
 const antAmount = 1;
 const foodAmount = 5;
 const timeBetweenMovesMs = 100;

@@ -85,5 +85,9 @@ function tryToLeavePheromone(ant) {
     if (!ant.hasFood) {
         createAnthillPheromone(ant);
         return;
-    }   
+    }
+    if (ant.hasFood) {
+        createFoodPheromone(ant);
+        return;
+    }
 }

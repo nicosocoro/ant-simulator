@@ -6,6 +6,7 @@ const anthill = {
 };
 
 const anthillPheromones = [];
+const foodPheromones = [];
 
 let foodCollectedInHill = 0;
 let runnning = true;
@@ -20,6 +21,7 @@ function printStatus() {
     console.log("Foods in map: " + foodsInMap.length);
     console.log("Foods delivered: " + foodCollectedInHill);
     console.log("Anthill pheromones: " + anthillPheromones.length);
+    console.log("Food pheromones: " + foodPheromones.length);
 }
 
 function stop() {
