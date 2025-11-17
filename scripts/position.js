@@ -1,7 +1,8 @@
-function isNear(position1, position2, threshold) {
+function isInRange(position1, position2, threshold) {
     const dx = position1.x - position2.x;
     const dy = position1.y - position2.y;
-    return Math.sqrt(dx * dx + dy * dy) <= threshold;
+    const hypotenuse = Math.sqrt(dx * dx + dy * dy);
+    return hypotenuse <= threshold;
 }
 
 function getRandomIntInclusive(min, max) {

@@ -42,7 +42,7 @@ function tryPickFood(ant) {
 function tryToDeliverFood(ant) {
     if (!ant.hasFood) return;
 
-    const isInHill = isNear(ant.position, anthill.position, anthill.radius);
+    const isInHill = isInRange(ant.position, anthill.position, anthill.radius);
     if (isInHill) {
         const antInDom = document.getElementById(ant.id);
         if (antInDom) antInDom.className = "ant";
@@ -58,7 +58,7 @@ function canPickFood(ant) {
         return false;
     }
     for (const food of foodsInMap) {
-        if (isNear(ant.position, food, 10)) {
+        if (isInRange(ant.position, food, 10)) {
             return true;
         }
     }
@@ -67,7 +67,7 @@ function canPickFood(ant) {
 
 function pickFood(ant) {
     for (const food of foodsInMap) {
-        if (isNear(ant.position, food, 10)) {
+        if (isInRange(ant.position, food, 10)) {
             removeFood(food);
 
             const antInDom = document.getElementById(ant.id);

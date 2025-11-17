@@ -19,7 +19,7 @@ function spawnFood() {
         const x = getRandomIntInclusive(mapSize - 50, mapSize - 10);
         const y = getRandomIntInclusive(mapSize - 50, mapSize - 10);
 
-        if (foodsInMap.some(food => isNear(food.position, { x: x, y: y }, 5))) {
+        if (foodsInMap.some(food => isInRange(food.position, { x: x, y: y }, 5))) {
             continue;
         }
 
