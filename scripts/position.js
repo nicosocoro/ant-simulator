@@ -1,7 +1,9 @@
 function isInRange(position1, position2, threshold) {
     const dx = position1.x - position2.x;
     const dy = position1.y - position2.y;
-    const hypotenuse = Math.sqrt(dx * dx + dy * dy);
+    const leg1 = dx * dx;
+    const leg2 = dy * dy;
+    const hypotenuse = Math.sqrt(leg1 + leg2);
     return hypotenuse <= threshold;
 }
 

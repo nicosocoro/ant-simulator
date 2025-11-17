@@ -10,7 +10,7 @@ function initialize() {
 async function run() {
     while (runnning) {
         for (const ant of antsInMap) {
-            ant__onCycleStart(ant);
+            ant__onCycleStart(ant, foodsInMap);
         }
 
         pheromone__onCycleCompleted();

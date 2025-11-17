@@ -10,11 +10,12 @@ function ant__spawn(index, initialPosition) {
     antInDom.className = "ant";
     antInDom.style.left = ant.position.x + "px";
     antInDom.style.top = ant.position.y + "px";
+    antInDom.style.zIndex = "99";
     document.getElementById("map").appendChild(antInDom);
     return ant;
 }
 
-function ant__onCycleStart(ant) {
+function ant__onCycleStart(ant, foodsInMap) {
     const newX = ant.position.x + (antMovementDistance * getRandomDirection());
     const newY = ant.position.y + (antMovementDistance * getRandomDirection());
     if (newX < 0 || newX > mapSize - 10 || newY < 0 || newY > mapSize - 10) {
@@ -28,14 +29,14 @@ function ant__onCycleStart(ant) {
     antInDom.style.left = ant.position.x + "px";
     antInDom.style.top = ant.position.y + "px";
 
-    tryPickFood(ant);
+    tryPickFood(ant, foodsInMap);
     tryToDeliverFood(ant);
     tryToLeavePheromone(ant);
 }
 
-function tryPickFood(ant) {
-    if (canPickFood(ant)) {
-        pickFood(ant);
+function tryPickFood(ant, foodsInMap) {
+    if (canPickFood(ant, foodsInMap)) {
+        pickFood(ant, foodsInMap);
     }
 }
 
@@ -53,21 +54,21 @@ function tryToDeliverFood(ant) {
     }
 }
 
-function canPickFood(ant) {
+function canPickFood(ant, foodsInMap) {
     if (ant.hasFood) {
         return false;
     }
     for (const food of foodsInMap) {
-        if (isInRange(ant.position, food, 10)) {
+        if (isInRange(ant.position, food.position, 10)) {
             return true;
         }
     }
     return false;
 }
 
-function pickFood(ant) {
+function pickFood(ant, foodsInMap) {
     for (const food of foodsInMap) {
-        if (isInRange(ant.position, food, 10)) {
+        if (isInRange(ant.position, food.position, 10)) {
             removeFood(food);
 
             const antInDom = document.getElementById(ant.id);
@@ -84,5 +85,5 @@ function tryToLeavePheromone(ant) {
     if (!ant.hasFood) {
         createAnthillPheromone(ant);
         return;
-    }
+    }   
 }
